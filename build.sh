@@ -30,7 +30,7 @@ LIB_DIR="$OUT_DIR/lib"
 ## Start Build Script ##
 ########################
 
-mkdir $LIB_DIR
+mkdir -p $LIB_DIR
 
 cd $CORE
 echo "Entering Directory: $(pwd)"
