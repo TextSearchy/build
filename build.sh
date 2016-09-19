@@ -30,7 +30,7 @@ LIB_DIR="$OUT_DIR/lib"
 ## Start Build Script ##
 ########################
 
-mkdir out
+mkdir $LIB_DIR
 
 cd $CORE
 echo "Entering Directory: $(pwd)"
@@ -57,6 +57,7 @@ echo "Main-Class: com.mmcoe.pdfConvertor.PDFHandler" > manifest.txt
 echo "Class-Path: lib/pdfbox.jar" >> manifest.txt
 jar cvfm pdfConvertor.jar manifest.txt *
 cp pdfConvertor.jar $OUT_DIR
+echo "Copying Dependencies..."
 cp ../lib/pdfbox.jar $LIB_DIR/
 echo "Building $blue CORE_ENGINE$nocol Finished"
 echo "Leaving Directory: $(pwd)"
