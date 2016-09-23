@@ -26,6 +26,8 @@ CORE="$WORKING_DIRECTORY/core_engine"
 CONVERTOR="$WORKING_DIRECTORY/pdfConvertor"
 OUT_DIR="$WORKING_DIRECTORY/out"
 LIB_DIR="$OUT_DIR/lib"
+PARA_SENTENCE="$WORKING_DIRECTORY/tools/prebuilts/ParaToSentence/ParaToSentence.py"
+OUT_SCRIPTS="$OUT_DIR/scripts/"
 ########################
 ## Start Build Script ##
 ########################
@@ -63,6 +65,13 @@ echo "Building $blue CORE_ENGINE$nocol Finished"
 echo "Leaving Directory: $(pwd)"
 cd $WORKING_DIRECTORY
 
+
+
+
+echo "Copying Prebuilt Tools and Scripts..."
+mkdir -p $OUT_SCRIPTS
+echo "$blue 1. ParaToSentence $nocol"
+cp $PARA_SENTENCE $OUT_SCRIPTS
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 echo "$blue Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
