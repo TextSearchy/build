@@ -25,14 +25,20 @@ WORKING_DIRECTORY=$(pwd)
 CORE="$WORKING_DIRECTORY/core_engine"
 CONVERTOR="$WORKING_DIRECTORY/pdfConvertor"
 OUT_DIR="$WORKING_DIRECTORY/out"
-LIB_DIR="$OUT_DIR/lib"
+OUT_LIB_ONLY="$OUT_DIR/ENGINE"
+OUT_LIB_ONLY_LIB_DIR="$OUT_LIB_ONLY/lib"
 PARA_SENTENCE="$WORKING_DIRECTORY/tools/prebuilts/ParaToSentence/ParaToSentence.py"
-OUT_SCRIPTS="$OUT_DIR/scripts/"
+OUT_SCRIPTS="$OUT_LIB_ONLY/scripts/"
+
+# ADD SAMPLE VARIABLES
+OUT_WEB="$OUT_DIR/website"
+SAMPLE_WEB="$WORKING_DIRECTORY/samples/website/web"
+
 ########################
 ## Start Build Script ##
 ########################
 
-mkdir -p $LIB_DIR
+mkdir -p $OUT_LIB_ONLY_LIB_DIR
 
 cd $CORE
 echo "Entering Directory: $(pwd)"
@@ -43,7 +49,7 @@ javac -d "classes" -classpath "classes" "src/com/mmcoe/core/Engine.java"
 cd classes
 echo "Main-Class: com.mmcoe.core.Engine" > manifest.txt
 jar cvfm core_engine.jar manifest.txt *
-cp core_engine.jar $OUT_DIR
+cp core_engine.jar $OUT_LIB_ONLY
 echo "Building $blue CORE_ENGINE$nocol Finished"
 echo "Leaving Directory: $(pwd)"
 cd $WORKING_DIRECTORY
@@ -58,20 +64,29 @@ cd classes
 echo "Main-Class: com.mmcoe.pdfConvertor.PDFHandler" > manifest.txt
 echo "Class-Path: lib/pdfbox.jar" >> manifest.txt
 jar cvfm pdfConvertor.jar manifest.txt *
-cp pdfConvertor.jar $OUT_DIR
+cp pdfConvertor.jar $OUT_LIB_ONLY
 echo "Copying Dependencies..."
-cp ../lib/pdfbox.jar $LIB_DIR/
+cp ../lib/pdfbox.jar $OUT_LIB_ONLY_LIB_DIR/
 echo "Building $blue CORE_ENGINE$nocol Finished"
 echo "Leaving Directory: $(pwd)"
 cd $WORKING_DIRECTORY
-
-
-
 
 echo "Copying Prebuilt Tools and Scripts..."
 mkdir -p $OUT_SCRIPTS
 echo "$blue 1. ParaToSentence $nocol"
 cp $PARA_SENTENCE $OUT_SCRIPTS
+
+echo "Building $blue Sample Website$nocol..."
+mkdir -p $OUT_WEB
+cp -f -R $SAMPLE_WEB $OUT_WEB
+cp -f -R $OUT_LIB_ONLY $OUT_WEB/web
+
+echo "$red NOTE: $nocol"
+echo "$red Copy The contents of $OUT_WEB $nocol"
+echo "$red According to your web server program. $nocol"
+echo ""
+chmod -R 777 $OUT_DIR/
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
-echo "$blue Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+echo "$green Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+echo ""
